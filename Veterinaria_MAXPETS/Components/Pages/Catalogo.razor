@@ -1,0 +1,95 @@
+﻿@page "/catalogo"
+@rendermode InteractiveServer
+@using Veterinaria_MaxPets.Models
+@inject IHttpClientFactory HttpClientFactory
+
+<div class="page-header">
+    <h2>🩺 Catálogo de Servicios Veterinarios</h2>
+</div>
+
+<div class="filtro-bar">
+    <label>Filtrar por especialidad:</label>
+    <select @onchange="FiltrarServicios">
+        <option value="0">Todos los servicios veterinarios</option>
+        <option value="4">Medicina veterinaria</option>
+    </select>
+</div>
+
+@if (errorMensaje != null)
+{
+    <p class="error-api">⚠️ @errorMensaje</p>
+}
+
+@if (serviciosFiltrados == null)
+{
+    <p class="cargando">Cargando catálogo...</p>
+}
+else if (!serviciosFiltrados.Any())
+{
+    <p class="sin-datos">No hay servicios disponibles.</p>
+}
+else
+{
+    <div class="cards-grid">
+        @foreach (var s in serviciosFiltrados)
+        {
+            <div class="servicio-card">
+                <div class="card-header-servicio">
+                    <span class="especialidad-tag">@s.Especialidad</span>
+                    @if (s.RequiereCita)
+                    {
+                        <span class="cita-tag">📅 Requiere cita</span>
+                    }
+                </div>
+                <h4>@s.Nombre</h4>
+                <p class="descripcion">@s.Descripcion</p>
+                <div class="card-footer-servicio">
+                    <span class="precio">$@s.Precio.ToString("N0")</span>
+                    <span class="duracion">⏱ @s.Duracion min</span>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<ServicioApi>? todosLosServicios;
+    private List<ServicioApi>? serviciosFiltrados;
+    private string? errorMensaje;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var http = HttpClientFactory.CreateClient("ApiProfesor");
+            todosLosServicios = await http.GetFromJsonAsync<List<ServicioApi>>(
+                "https://api-udec-pweb-aedec9hxbugye0am.westus3-01.azurewebsites.net/api/salud/servicios");
+
+            serviciosFiltrados = todosLosServicios?
+                .Where(s => s.EspecialidadId == 4)
+                .ToList();
+        }
+        catch (Exception ex)
+        {
+            errorMensaje = "No se pudo conectar con la API. Intenta de nuevo más tarde.";
+        }
+    }
+
+    private void FiltrarServicios(ChangeEventArgs e)
+    {
+        int especialidadId = int.Parse(e.Value?.ToString() ?? "0");
+
+        if (especialidadId == 0)
+        {
+            serviciosFiltrados = todosLosServicios?
+                .Where(s => s.EspecialidadId == 4)
+                .ToList();
+        }
+        else
+        {
+            serviciosFiltrados = todosLosServicios?
+                .Where(s => s.EspecialidadId == especialidadId)
+                .ToList();
+        }
+    }
+}

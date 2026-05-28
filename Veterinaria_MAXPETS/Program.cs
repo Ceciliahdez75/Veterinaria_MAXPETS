@@ -12,6 +12,11 @@ builder.Services.AddRazorComponents()
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddHttpClient("ApiProfesor", client =>
+{
+    client.BaseAddress = new Uri("https://api-udec-pweb-aedec9hxbugye0am.westus3-01.azurewebsites.net/");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

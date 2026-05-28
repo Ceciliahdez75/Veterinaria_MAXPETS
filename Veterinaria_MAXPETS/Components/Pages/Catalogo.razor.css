@@ -1,0 +1,144 @@
+﻿.page-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+    .page-header h2 {
+        font-family: 'Raleway', sans-serif;
+        color: #1a3c5e;
+        margin: 0;
+    }
+
+.filtro-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    background: white;
+    padding: 16px 20px;
+    border-radius: 10px;
+    border: 0.5px solid #d0dce8;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+    .filtro-bar label {
+        font-family: 'Raleway', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        color: #2a5a7c;
+    }
+
+    .filtro-bar select {
+        padding: 8px 14px;
+        border: 1px solid #c5d5e5;
+        border-radius: 7px;
+        font-family: 'Raleway', sans-serif;
+        font-size: 14px;
+        color: #1a3c5e;
+        outline: none;
+    }
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.servicio-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border: 0.5px solid #d0dce8;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: box-shadow 0.2s;
+}
+
+    .servicio-card:hover {
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+.card-header-servicio {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.especialidad-tag {
+    font-family: 'Raleway', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #2a6496;
+    background-color: #eaf2f8;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cita-tag {
+    font-family: 'Raleway', sans-serif;
+    font-size: 11px;
+    color: #c8860a;
+    font-weight: 600;
+}
+
+.servicio-card h4 {
+    font-family: 'Raleway', sans-serif;
+    color: #1a3c5e;
+    font-size: 16px;
+    margin: 0 0 8px;
+}
+
+.descripcion {
+    font-family: 'Raleway', sans-serif;
+    font-size: 13px;
+    color: #7f8c8d;
+    margin: 0 0 16px;
+    line-height: 1.5;
+}
+
+.card-footer-servicio {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #e8eff5;
+    padding-top: 12px;
+}
+
+.precio {
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a3c5e;
+}
+
+.duracion {
+    font-family: 'Raleway', sans-serif;
+    font-size: 12px;
+    color: #7f8c8d;
+}
+
+.cargando {
+    font-family: 'Raleway', sans-serif;
+    color: #2a5a7c;
+    text-align: center;
+    padding: 40px;
+}
+
+.sin-datos {
+    font-family: 'Raleway', sans-serif;
+    color: #7f8c8d;
+    text-align: center;
+    padding: 40px;
+}
+.error-api {
+    font-family: 'Raleway', sans-serif;
+    color: #c0392b;
+    background-color: #fdf3f3;
+    border: 1px solid #f5b7b1;
+    padding: 16px 20px;
+    border-radius: 10px;
+    text-align: center;
+}
