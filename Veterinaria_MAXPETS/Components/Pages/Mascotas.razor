@@ -1,4 +1,6 @@
 ﻿@page "/mascotas"
+
+@rendermode InteractiveServer
 @using Veterinaria_MaxPets.Models
 @using Veterinaria_MaxPets.Data
 @inject AppDbContext Db
@@ -193,7 +195,16 @@
         }
         else
         {
-            Db.Mascotas.Update(mascotaEditando);
+            var existente = await Db.Mascotas.FindAsync(mascotaEditando.Id);
+            if (existente != null)
+            {
+                existente.Nombre = mascotaEditando.Nombre;
+                existente.Especie = mascotaEditando.Especie;
+                existente.Raza = mascotaEditando.Raza;
+                existente.NombreDueno = mascotaEditando.NombreDueno;
+                existente.Telefono = mascotaEditando.Telefono;
+                existente.Email = mascotaEditando.Email;
+            }
             mensaje = "✅ Mascota actualizada correctamente.";
         }
 
@@ -203,7 +214,6 @@
         enviado = false;
         await CargarMascotas();
     }
-
     private async Task EliminarMascota(Mascota m)
     {
         bool confirmar = await JS.InvokeAsync<bool>("confirm",
