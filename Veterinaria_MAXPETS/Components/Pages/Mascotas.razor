@@ -1,0 +1,228 @@
+﻿@page "/mascotas"
+@using Veterinaria_MaxPets.Models
+@using Veterinaria_MaxPets.Data
+@inject AppDbContext Db
+@inject IJSRuntime JS
+
+<div class="page-header">
+    <h2>Gestión de Mascotas</h2>
+    <button class="btn-agregar" @onclick="MostrarFormularioNuevo">+ Nueva mascota</button>
+</div>
+
+@if (mostrarFormulario)
+{
+    <div class="formulario-card">
+        <h4>@(mascotaEditando.Id == 0 ? "Nueva mascota" : "Editar mascota")</h4>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Nombre de la mascota *</label>
+                <input @bind="mascotaEditando.Nombre" placeholder="Ej. Max" />
+                @if (enviado && string.IsNullOrWhiteSpace(mascotaEditando.Nombre))
+                {
+                    <span class="error">Campo obligatorio</span>
+                }
+            </div>
+
+            <div class="form-group">
+                <label>Especie *</label>
+                <select @bind="mascotaEditando.Especie">
+                    <option value="">-- Selecciona --</option>
+                    <option>Perro</option>
+                    <option>Gato</option>
+                    <option>Ave</option>
+                    <option>Conejo</option>
+                    <option>Otro</option>
+                </select>
+                @if (enviado && string.IsNullOrWhiteSpace(mascotaEditando.Especie))
+                {
+                    <span class="error">Campo obligatorio</span>
+                }
+            </div>
+
+            <div class="form-group">
+                <label>Raza</label>
+                <input @bind="mascotaEditando.Raza" placeholder="Ej. Labrador" />
+            </div>
+
+            <div class="form-group">
+                <label>Nombre del dueño *</label>
+                <input @bind="mascotaEditando.NombreDueno" placeholder="Ej. Ana García" />
+                @if (enviado && string.IsNullOrWhiteSpace(mascotaEditando.NombreDueno))
+                {
+                    <span class="error">Campo obligatorio</span>
+                }
+            </div>
+
+            <div class="form-group">
+                <label>Teléfono *</label>
+                <input @bind="mascotaEditando.Telefono" placeholder="Ej. 3121234567" />
+                @if (enviado && string.IsNullOrWhiteSpace(mascotaEditando.Telefono))
+                {
+                    <span class="error">Campo obligatorio</span>
+                }
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input @bind="mascotaEditando.Email" placeholder="Ej. ana@email.com" />
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+            <button class="btn-guardar" @onclick="GuardarMascota">Guardar</button>
+            <button class="btn-cancelar" @onclick="CancelarFormulario">Cancelar</button>
+        </div>
+
+    </div>
+}
+
+@if (mensaje != "")
+{
+    <div class="alerta @(esError ? "alerta-error" : "alerta-exito")">
+        @mensaje
+    </div>
+}
+
+<div class="tabla-card">
+    @if (mascotas == null)
+    {
+        <p>Cargando mascotas...</p>
+    }
+    else if (!mascotas.Any())
+    {
+        <p class="sin-datos">No hay mascotas registradas aún.</p>
+    }
+    else
+    {
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Especie</th>
+                    <th>Raza</th>
+                    <th>Dueño</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var m in mascotas)
+                {
+                    <tr>
+                        <td>@m.Nombre</td>
+                        <td>@m.Especie</td>
+                        <td>@m.Raza</td>
+                        <td>@m.NombreDueno</td>
+                        <td>@m.Telefono</td>
+                        <td>@m.Email</td>
+                        <td>
+                            <button class="btn-editar" @onclick="() => EditarMascota(m)">Editar</button>
+                            <button class="btn-eliminar" @onclick="() => EliminarMascota(m)">Eliminar</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    private List<Mascota>? mascotas;
+    private Mascota mascotaEditando = new();
+    private bool mostrarFormulario = false;
+    private bool enviado = false;
+    private string mensaje = "";
+    private bool esError = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarMascotas();
+    }
+
+    private async Task CargarMascotas()
+    {
+        mascotas = await Task.Run(() => Db.Mascotas.ToList());
+    }
+
+    private void MostrarFormularioNuevo()
+    {
+        mascotaEditando = new Mascota { FechaRegistro = DateTime.Now };
+        enviado = false;
+        mensaje = "";
+        mostrarFormulario = true;
+    }
+
+    private void EditarMascota(Mascota m)
+    {
+        mascotaEditando = new Mascota
+        {
+            Id = m.Id,
+            Nombre = m.Nombre,
+            Especie = m.Especie,
+            Raza = m.Raza,
+            NombreDueno = m.NombreDueno,
+            Telefono = m.Telefono,
+            Email = m.Email,
+            FechaRegistro = m.FechaRegistro
+        };
+        enviado = false;
+        mensaje = "";
+        mostrarFormulario = true;
+    }
+
+    private async Task GuardarMascota()
+    {
+        enviado = true;
+
+        if (string.IsNullOrWhiteSpace(mascotaEditando.Nombre) ||
+            string.IsNullOrWhiteSpace(mascotaEditando.Especie) ||
+            string.IsNullOrWhiteSpace(mascotaEditando.NombreDueno) ||
+            string.IsNullOrWhiteSpace(mascotaEditando.Telefono))
+        {
+            return;
+        }
+
+        if (mascotaEditando.Id == 0)
+        {
+            Db.Mascotas.Add(mascotaEditando);
+            mensaje = "✅ Mascota registrada correctamente.";
+        }
+        else
+        {
+            Db.Mascotas.Update(mascotaEditando);
+            mensaje = "✅ Mascota actualizada correctamente.";
+        }
+
+        await Db.SaveChangesAsync();
+        esError = false;
+        mostrarFormulario = false;
+        enviado = false;
+        await CargarMascotas();
+    }
+
+    private async Task EliminarMascota(Mascota m)
+    {
+        bool confirmar = await JS.InvokeAsync<bool>("confirm",
+            $"¿Estás segura de que deseas eliminar a {m.Nombre}?");
+
+        if (confirmar)
+        {
+            Db.Mascotas.Remove(m);
+            await Db.SaveChangesAsync();
+            mensaje = "✅ Mascota eliminada.";
+            esError = false;
+            await CargarMascotas();
+        }
+    }
+
+    private void CancelarFormulario()
+    {
+        mostrarFormulario = false;
+        enviado = false;
+        mensaje = "";
+    }
+}
