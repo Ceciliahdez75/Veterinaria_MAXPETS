@@ -29,6 +29,7 @@ Integra datos de la API del profesor con una base de datos propia en Azure SQL.
 ![Dashboard](capturas/dashbord2.png)
 
 
+
 ### Pantalla 2 — Catálogo de Servicios
 ![Catalogo](capturas/Servicios.png)
 
@@ -37,3 +38,5 @@ Integra datos de la API del profesor con una base de datos propia en Azure SQL.
 
 ### Pantalla 4 — Registro de Citas
 ![Citas](capturas/citas.png)
+<img width="1919" height="955" alt="citas" src="https://github.com/user-attachments/assets/f5cff0f0-e3f9-4d63-9e25-3ff36634a33d" />
+
