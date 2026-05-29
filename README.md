@@ -25,18 +25,16 @@ Integra datos de la API del profesor con una base de datos propia en Azure SQL.
 ## Pantallas del sistema
 
 ### Pantalla 1 — Dashboard
-![Dashboard](capturas/dashbord1.png)
-![Dashboard](capturas/dashbord2.png)
-
-
+<img width="1919" height="966" alt="dashbord1" src="https://github.com/user-attachments/assets/6ff60828-7c25-41c7-87c1-fed37038b371" />
+<img width="1913" height="951" alt="dashbord2" src="https://github.com/user-attachments/assets/b34eb4af-34b5-4e46-9a6c-54d1411f66e6" />
 
 ### Pantalla 2 — Catálogo de Servicios
-![Catalogo](capturas/Servicios.png)
+<img width="1912" height="974" alt="Servicios" src="https://github.com/user-attachments/assets/35dd9949-449c-4626-acf2-545bd7411f8a" />
 
 ### Pantalla 3 — Gestión de Mascotas
-![Mascotas](capturas/mascotas.png)
+<img width="1918" height="965" alt="mascotas" src="https://github.com/user-attachments/assets/6bbea10f-6b31-43d4-bbfe-1f328c59b7ab" />
+
 
 ### Pantalla 4 — Registro de Citas
-![Citas](capturas/citas.png)
 <img width="1919" height="955" alt="citas" src="https://github.com/user-attachments/assets/f5cff0f0-e3f9-4d63-9e25-3ff36634a33d" />
 
