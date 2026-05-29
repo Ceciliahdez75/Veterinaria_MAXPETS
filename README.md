@@ -38,3 +38,7 @@ Integra datos de la API del profesor con una base de datos propia en Azure SQL.
 ### Pantalla 4 — Registro de Citas
 <img width="1919" height="955" alt="citas" src="https://github.com/user-attachments/assets/f5cff0f0-e3f9-4d63-9e25-3ff36634a33d" />
 
+## Declaratoria de IA
+Herramienta utilizada: Gemini
+Uso: Creacion de logo y marca.
+Enlace de conversación: (https://gemini.google.com/share/8bbf9b60ab2b)
