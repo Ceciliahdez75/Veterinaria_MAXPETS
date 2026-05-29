@@ -3,7 +3,7 @@
     public class Cita
     {
         public int Id { get; set; }
-        public int MascotaId { get; set; }        // FK obligatoria
+        public int MascotaId { get; set; }        // Foreging Key obligatoria
         public DateTime Fecha { get; set; }
         public decimal Total { get; set; }
         public string Estado { get; set; } = "Pendiente";

@@ -66,39 +66,64 @@ else
         await CargarServicios(especialidadId);
     }
 
-    private async Task CargarServicios(int especialidadId)
-    {
-        try
-        {
-            var http = HttpClientFactory.CreateClient("ApiProfesor");
+    //private async Task CargarServicios(int especialidadId)
+    //{
+     //   try
+       // {
+         //   var http = HttpClientFactory.CreateClient("ApiProfesor");
 
-            if (especialidadId == 0)
-                serviciosFiltrados = await http.GetFromJsonAsync<List<ServicioApi>>(
-                    "api/salud/servicios");
-            else
-                serviciosFiltrados = await http.GetFromJsonAsync<List<ServicioApi>>(
-                    $"api/salud/servicios/especialidad/{especialidadId}");
-        }
-        catch
-        {
+           // if (especialidadId == 0)
+             //   serviciosFiltrados = await http.GetFromJsonAsync<List<ServicioApi>>(
+               //     "api/salud/servicios");
+
+            // else
+            //   serviciosFiltrados = await http.GetFromJsonAsync<List<ServicioApi>>(
+            //   $"api/salud/servicios/especialidad/{especialidadId}");
+            //  }
+            //  catch
+            // {
             // DATOS DE PRUEBA — descomentar si la API está caída
-            /*
-            var datosPrueba = new List<ServicioApi>
-            {
-                new ServicioApi { Id = 13, Nombre = "Baño y corte básico", Descripcion = "Limpieza e higiene de la mascota", Precio = 250, Duracion = 60, RequiereCita = true, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
-                new ServicioApi { Id = 10, Nombre = "Consulta veterinaria", Descripcion = "Revisión general de la mascota", Precio = 300, Duracion = 30, RequiereCita = true, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
-                new ServicioApi { Id = 12, Nombre = "Desparasitación interna", Descripcion = "Tratamiento oral antiparasitario", Precio = 120, Duracion = 10, RequiereCita = false, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
-                new ServicioApi { Id = 14, Nombre = "Esterilización canina", Descripcion = "Cirugía de esterilización hembra", Precio = 1800, Duracion = 120, RequiereCita = true, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
-                new ServicioApi { Id = 11, Nombre = "Vacuna antirrábica", Descripcion = "Aplicación anual obligatoria", Precio = 180, Duracion = 15, RequiereCita = false, Especialidad = "Medicina veterinaria", EspecialidadId = 4 }
-            };
-            serviciosFiltrados = especialidadId == 0
-                ? datosPrueba
-                : datosPrueba.Where(s => s.EspecialidadId == especialidadId).ToList();
-            errorMensaje = null;
-            */
 
-            errorMensaje = "No se pudo conectar con la API. Intenta de nuevo más tarde.";
-            serviciosFiltrados = new List<ServicioApi>();
+            //var datosPrueba = new List<ServicioApi>
+            //   {
+            //     new ServicioApi { Id = 13, Nombre = "Baño y corte básico", Descripcion = "Limpieza e higiene de la mascota", Precio = 250, Duracion = 60, RequiereCita = true, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
+            //     new ServicioApi { Id = 10, Nombre = "Consulta veterinaria", Descripcion = "Revisión general de la mascota", Precio = 300, Duracion = 30, RequiereCita = true, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
+            //     new ServicioApi { Id = 12, Nombre = "Desparasitación interna", Descripcion = "Tratamiento oral antiparasitario", Precio = 120, Duracion = 10, RequiereCita = false, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
+            //     new ServicioApi { Id = 14, Nombre = "Esterilización canina", Descripcion = "Cirugía de esterilización hembra", Precio = 1800, Duracion = 120, RequiereCita = true, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
+            //     new ServicioApi { Id = 11, Nombre = "Vacuna antirrábica", Descripcion = "Aplicación anual obligatoria", Precio = 180, Duracion = 15, RequiereCita = false, Especialidad = "Medicina veterinaria", EspecialidadId = 4 }
+            // };
+            // serviciosFiltrados = especialidadId == 0
+            // ? datosPrueba
+            // : datosPrueba.Where(s => s.EspecialidadId == especialidadId).ToList();
+            // errorMensaje = null;
+            // 
+
+          //  errorMensaje = "No se pudo conectar con la API. Intenta de nuevo más tarde.";
+          //  serviciosFiltrados = new List<ServicioApi>();
+        
+private async Task CargarServicios(int especialidadId)
+{
+    try
+    {
+        var http = HttpClientFactory.CreateClient("ApiProfesor");
+
+        var todos = await http.GetFromJsonAsync<List<ServicioApi>>(
+            "/Servicios");
+
+        if (todos != null)
+        {
+            serviciosFiltrados = especialidadId == 0
+                ? todos
+                : todos.Where(s => s.EspecialidadId == especialidadId).ToList();
         }
+
+        errorMensaje = null;
     }
+    catch
+    {
+        errorMensaje = "No se pudo conectar con la API.";
+        serviciosFiltrados = new List<ServicioApi>();
+
+    }
+   }
  }

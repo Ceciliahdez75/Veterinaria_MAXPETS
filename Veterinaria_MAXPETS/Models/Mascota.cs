@@ -11,6 +11,6 @@
         public string Email { get; set; } = string.Empty;
         public DateTime FechaRegistro { get; set; } = DateTime.Now;
 
-        public ICollection<Cita> Citas { get; set; } = new List<Cita>();
-    }
+        public ICollection<Cita> Citas { get; set; } = new List<Cita>(); //se hace la relacion con la tabla Cita uno a muchos
+    } 
 }

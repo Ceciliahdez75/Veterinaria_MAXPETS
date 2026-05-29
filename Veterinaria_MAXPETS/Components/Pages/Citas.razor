@@ -161,32 +161,53 @@
         {
             var http = HttpClientFactory.CreateClient("ApiProfesor");
 
-            // Endpoint 1 — todos los servicios
-            var todos = await http.GetFromJsonAsync<List<ServicioApi>>(
-                "api/salud/servicios");
-
-            // Endpoint 2 — filtrado por especialidad medicina veterinaria
             serviciosApi = await http.GetFromJsonAsync<List<ServicioApi>>(
-                "api/salud/servicios/especialidad/4");
+                "/Servicios");
+
+            if (serviciosApi != null)
+            {
+                serviciosApi = serviciosApi
+                    .Where(s => s.EspecialidadId == 4)
+                    .ToList();
+            }
         }
         catch
         {
-            // DATOS DE PRUEBA — descomentar si la API está caída
-            /*
-            serviciosApi = new List<ServicioApi>
-            {
-                new ServicioApi { Id = 13, Nombre = "Baño y corte básico", Descripcion = "Limpieza e higiene de la mascota", Precio = 250, Duracion = 60, RequiereCita = true, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
-                new ServicioApi { Id = 10, Nombre = "Consulta veterinaria", Descripcion = "Revisión general de la mascota", Precio = 300, Duracion = 30, RequiereCita = true, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
-                new ServicioApi { Id = 12, Nombre = "Desparasitación interna", Descripcion = "Tratamiento oral antiparasitario", Precio = 120, Duracion = 10, RequiereCita = false, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
-                new ServicioApi { Id = 14, Nombre = "Esterilización canina", Descripcion = "Cirugía de esterilización hembra", Precio = 1800, Duracion = 120, RequiereCita = true, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
-                new ServicioApi { Id = 11, Nombre = "Vacuna antirrábica", Descripcion = "Aplicación anual obligatoria", Precio = 180, Duracion = 15, RequiereCita = false, Especialidad = "Medicina veterinaria", EspecialidadId = 4 }
-            };
-            */
-
             serviciosApi = new List<ServicioApi>();
         }
     }
+    //private async Task CargarServiciosApi()
+   // {
+     //   try
+       // {
+         //   var http = HttpClientFactory.CreateClient("ApiProfesor");
 
+            // Endpoint 1 — todos los servicios
+           // var todos = await http.GetFromJsonAsync<List<ServicioApi>>(
+             //   "api/salud/servicios");
+
+            // Endpoint 2 — filtrado por especialidad medicina veterinaria
+          //  serviciosApi = await http.GetFromJsonAsync<List<ServicioApi>>(
+           //     "api/salud/servicios/especialidad/4");
+     //   }
+      //  catch
+     //   {
+            // DATOS DE PRUEBA — descomentar si la API está caída
+           
+          //  serviciosApi = new List<ServicioApi>
+         //   {
+           //     new ServicioApi { Id = 13, Nombre = "Baño y corte básico", Descripcion = "Limpieza e higiene de la mascota", Precio = 250, Duracion = 60, RequiereCita = true, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
+           //     new ServicioApi { Id = 10, Nombre = "Consulta veterinaria", Descripcion = "Revisión general de la mascota", Precio = 300, Duracion = 30, RequiereCita = true, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
+           //     new ServicioApi { Id = 12, Nombre = "Desparasitación interna", Descripcion = "Tratamiento oral antiparasitario", Precio = 120, Duracion = 10, RequiereCita = false, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
+           //     new ServicioApi { Id = 14, Nombre = "Esterilización canina", Descripcion = "Cirugía de esterilización hembra", Precio = 1800, Duracion = 120, RequiereCita = true, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
+           //     new ServicioApi { Id = 11, Nombre = "Vacuna antirrábica", Descripcion = "Aplicación anual obligatoria", Precio = 180, Duracion = 15, RequiereCita = false, Especialidad = "Medicina veterinaria", EspecialidadId = 4 }
+           // };
+            
+         //   serviciosApi = new List<ServicioApi>();  
+       // }
+   // }
+    
+   
     private async Task CargarCitas()
     {
         citas = await Db.Citas

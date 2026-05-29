@@ -14,7 +14,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddHttpClient("ApiProfesor", client =>
 {
-    client.BaseAddress = new Uri("https://api-udec-pweb-aedec9hxbugye0am.westus3-01.azurewebsites.net/");
+    
+  //  client.BaseAddress = new Uri("https://api-udec-pweb-aedec9hxbugye0am.westus3-01.azurewebsites.net/");
+// });
+
+client.BaseAddress = new Uri("https://6a195ede489e47157519dc4f.mockapi.io");
 });
 
 var app = builder.Build();
