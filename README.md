@@ -25,10 +25,12 @@ Integra datos de la API del profesor con una base de datos propia en Azure SQL.
 ## Pantallas del sistema
 
 ### Pantalla 1 — Dashboard
-![Dashboard](capturas/dashboard.png)
+![Dashboard](capturas/dashbord1.png)
+![Dashboard](capturas/dashbord2.png)
+
 
 ### Pantalla 2 — Catálogo de Servicios
-![Catalogo](capturas/catalogo.png)
+![Catalogo](capturas/Servicios.png)
 
 ### Pantalla 3 — Gestión de Mascotas
 ![Mascotas](capturas/mascotas.png)
