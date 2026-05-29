@@ -1,0 +1,285 @@
+﻿.dashboard { padding-bottom: 48px; }
+
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #1a3c5e 0%, #2a6496 60%, #3a7fc1 100%);
+    border-radius: 20px;
+    padding: 52px 56px;
+    margin-bottom: 48px;
+    overflow: hidden;
+    position: relative;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+}
+
+.hero-texto { flex: 1; z-index: 1; }
+
+.hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    color: #ffffff;
+    font-family: 'Raleway', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.hero-texto h1 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 16px;
+    line-height: 1.15;
+}
+
+.hero-nombre {
+    color: #c8860a;
+    display: block;
+}
+
+.hero-subtitulo {
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    color: rgba(255,255,255,0.8);
+    margin: 0 0 32px;
+    max-width: 420px;
+    line-height: 1.7;
+}
+
+.hero-botones { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.btn-hero-primary {
+    background-color: #c8860a;
+    color: white;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+    display: inline-block;
+}
+
+.btn-hero-primary:hover {
+    background-color: #a06808;
+    transform: translateY(-2px);
+}
+
+.btn-hero-secondary {
+    background-color: rgba(255,255,255,0.15);
+    color: white;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.3);
+    transition: background 0.2s;
+    display: inline-block;
+}
+
+.btn-hero-secondary:hover { background-color: rgba(255,255,255,0.25); }
+
+.hero-ilustracion {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    flex-shrink: 0;
+}
+
+.ilustracion-circulo {
+    width: 200px; height: 200px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 90px;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid rgba(255,255,255,0.2);
+}
+
+.ilustracion-burbuja {
+    position: absolute;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.burbuja-1 { width: 70px; height: 70px; top: 0; right: 20px; }
+.burbuja-2 { width: 60px; height: 60px; bottom: 10px; right: 0; }
+.burbuja-3 { width: 55px; height: 55px; bottom: 20px; left: 10px; }
+
+/* SECCIÓN TÍTULO */
+.seccion-titulo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.seccion-titulo h3 {
+    font-family: 'Raleway', sans-serif;
+    color: #1a3c5e;
+    margin: 0;
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+.seccion-linea {
+    flex: 1;
+    height: 1px;
+    background: #d0dce8;
+}
+
+/* INDICADORES */
+.indicadores-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.indicador-card {
+    border-radius: 16px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.indicador-card:hover { transform: translateY(-3px); }
+
+.indicador-card::before {
+    content: '';
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+}
+
+.indicador-card.azul { background: linear-gradient(135deg, #1a3c5e, #2a6496); }
+.indicador-card.cafe { background: linear-gradient(135deg, #8b5e0a, #c8860a); }
+.indicador-card.verde { background: linear-gradient(135deg, #0f5132, #1a7a4a); }
+.indicador-card.naranja { background: linear-gradient(135deg, #7c3d0a, #c4622d); }
+
+.ind-icono { font-size: 32px; }
+
+.ind-datos { display: flex; flex-direction: column; }
+
+.ind-numero {
+    font-family: 'Raleway', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+}
+
+.ind-label {
+    font-family: 'Raleway', sans-serif;
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    margin-top: 4px;
+}
+
+.ind-link {
+    font-family: 'Raleway', sans-serif;
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 4px;
+    transition: color 0.2s;
+}
+
+.ind-link:hover { color: white; }
+
+/* ÚLTIMAS CITAS */
+.ultimas-citas-card {
+    background: white;
+    border-radius: 16px;
+    padding: 28px;
+    border: 0.5px solid #d0dce8;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+
+.tabla-citas {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+}
+
+.tabla-citas th {
+    text-align: left;
+    padding: 10px 14px;
+    background-color: #f0f6fb;
+    color: #1a3c5e;
+    font-weight: 700;
+    border-bottom: 2px solid #d0dce8;
+}
+
+.tabla-citas td {
+    padding: 12px 14px;
+    color: #2a5a7c;
+    border-bottom: 0.5px solid #e8eff5;
+}
+
+.tabla-citas tr:last-child td { border-bottom: none; }
+.tabla-citas tr:hover td { background-color: #f8fbfd; }
+
+.mascota-nombre { font-weight: 600; color: #1a3c5e; }
+
+.estado-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.estado-pendiente { background-color: #fef9e7; color: #c8860a; }
+.estado-confirmada { background-color: #eaf2f8; color: #2a6496; }
+.estado-completada { background-color: #eafaf1; color: #1e7e34; }
+.estado-cancelada { background-color: #fdf3f3; color: #c0392b; }
+
+.sin-citas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    gap: 12px;
+}
+
+.sin-citas-emoji { font-size: 48px; }
+
+.sin-citas p {
+    font-family: 'Raleway', sans-serif;
+    color: #7f8c8d;
+    margin: 0;
+    font-size: 15px;
+}
+

@@ -1,7 +1,151 @@
-﻿@page "/home"
+﻿@page "/"
+@rendermode InteractiveServer
+@using Veterinaria_MaxPets.Models
+@using Veterinaria_MaxPets.Data
+@using Microsoft.EntityFrameworkCore
+@inject AppDbContext Db
+@inject IHttpClientFactory HttpClientFactory
 
-<PageTitle>Home</PageTitle>
+<div class="dashboard">
 
-<h1>Hello, world!</h1>
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-texto">
+            <span class="hero-badge">🐾 Sistema Veterinario</span>
+            <h1>Bienvenida a<br /><span class="hero-nombre">MaxPets</span></h1>
+            <p class="hero-subtitulo">Cuidamos a tu mejor amigo con tecnología y amor. Gestiona mascotas, citas y servicios desde un solo lugar.</p>
+            <div class="hero-botones">
+                <a href="/mascotas" class="btn-hero-primary">Nueva mascota</a>
+                <a href="/citas" class="btn-hero-secondary">Agendar cita</a>
+            </div>
+        </div>
+        <div class="hero-ilustracion">
+            <div class="ilustracion-circulo">
+                <span class="ilustracion-emoji">🐶</span>
+            </div>
+            <div class="ilustracion-burbuja burbuja-1">🐱</div>
+            <div class="ilustracion-burbuja burbuja-2">🐰</div>
+            <div class="ilustracion-burbuja burbuja-3">🦜</div>
+        </div>
+    </div>
 
-Welcome to your new app.
+    <!-- INDICADORES -->
+    <div class="seccion-titulo">
+        <h3>Resumen del sistema</h3>
+        <span class="seccion-linea"></span>
+    </div>
+
+    <div class="indicadores-grid">
+        <div class="indicador-card azul">
+            <div class="ind-icono">🐶</div>
+            <div class="ind-datos">
+                <span class="ind-numero">@totalMascotas</span>
+                <span class="ind-label">Mascotas registradas</span>
+            </div>
+            <a href="/mascotas" class="ind-link">Ver todas →</a>
+        </div>
+
+        <div class="indicador-card cafe">
+            <div class="ind-icono">📋</div>
+            <div class="ind-datos">
+                <span class="ind-numero">@totalCitas</span>
+                <span class="ind-label">Citas registradas</span>
+            </div>
+            <a href="/citas" class="ind-link">Ver todas →</a>
+        </div>
+
+        <div class="indicador-card verde">
+            <div class="ind-icono">🩺</div>
+            <div class="ind-datos">
+                <span class="ind-numero">@(serviciosApi?.Count ?? 0)</span>
+                <span class="ind-label">Servicios veterinarios</span>
+            </div>
+            <a href="/catalogo" class="ind-link">Ver catálogo →</a>
+        </div>
+
+        <div class="indicador-card naranja">
+            <div class="ind-icono">⏳</div>
+            <div class="ind-datos">
+                <span class="ind-numero">@citasPendientes</span>
+                <span class="ind-label">Citas pendientes</span>
+            </div>
+            <a href="/citas" class="ind-link">Gestionar →</a>
+        </div>
+    </div>
+
+    <!-- ÚLTIMAS CITAS -->
+    <div class="seccion-titulo" style="margin-top: 48px;">
+        <h3>Últimas citas registradas</h3>
+        <span class="seccion-linea"></span>
+    </div>
+
+    <div class="ultimas-citas-card">
+        @if (ultimasCitas == null || !ultimasCitas.Any())
+        {
+            <div class="sin-citas">
+                <span class="sin-citas-emoji">📭</span>
+                <p>No hay citas registradas aún.</p>
+                <a href="/citas" class="btn-hero-primary">Agendar primera cita</a>
+            </div>
+        }
+        else
+        {
+            <table class="tabla-citas">
+                <thead>
+                    <tr>
+                        <th>Mascota</th>
+                        <th>Dueño</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in ultimasCitas)
+                    {
+                        <tr>
+                            <td><span class="mascota-nombre">🐾 @c.Mascota?.Nombre</span></td>
+                            <td>@c.Mascota?.NombreDueno</td>
+                            <td>@c.Fecha.ToString("dd/MM/yyyy")</td>
+                            <td><strong>$@c.Total.ToString("N0")</strong></td>
+                            <td><span class="estado-badge estado-@c.Estado.ToLower()">@c.Estado</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+@code {
+    private int totalMascotas;
+    private int totalCitas;
+    private int citasPendientes;
+    private List<ServicioApi>? serviciosApi;
+    private List<Cita>? ultimasCitas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        totalMascotas = await Db.Mascotas.CountAsync();
+        totalCitas = await Db.Citas.CountAsync();
+        citasPendientes = await Db.Citas.CountAsync(c => c.Estado == "Pendiente");
+
+        ultimasCitas = await Db.Citas
+            .Include(c => c.Mascota)
+            .OrderByDescending(c => c.Fecha)
+            .Take(5)
+            .ToListAsync();
+
+        try
+        {
+            var http = HttpClientFactory.CreateClient("ApiProfesor");
+            var todos = await http.GetFromJsonAsync<List<ServicioApi>>(
+                "https://api-udec-pweb-aedec9hxbugye0am.westus3-01.azurewebsites.net/api/salud/servicios");
+            serviciosApi = todos?.Where(s => s.EspecialidadId == 4).ToList();
+        }
+        catch
+        {
+            serviciosApi = new List<ServicioApi>();
+        }
+    }
+}
