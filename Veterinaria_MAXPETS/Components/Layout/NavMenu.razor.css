@@ -4,9 +4,9 @@
     justify-content: space-between;
     background-color: #ffffff;
     border-bottom: 3px solid #2a6496;
-    padding: 0 40px;
-    height: 80px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 0 48px;
+    height: 90px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -16,11 +16,11 @@
 .topnav-brand {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
 }
 
 .nav-logo {
-    height: 58px;
+    height: 75px;
     width: auto;
     object-fit: contain;
 }
@@ -33,37 +33,37 @@
 
 .brand-name {
     font-family: 'Raleway', sans-serif;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
     color: #1a3c5e;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     line-height: 1.2;
 }
 
 .brand-tagline {
     font-family: 'Raleway', sans-serif;
-    font-size: 11px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
     color: #c8860a;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     text-transform: uppercase;
 }
 
 .topnav-links {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 6px;
     font-family: 'Raleway', sans-serif;
 }
 
     .topnav-links a {
-        padding: 8px 24px;
-        border-radius: 6px;
+        padding: 9px 22px;
+        border-radius: 20px;
         color: #2a5a7c;
         font-family: 'Raleway', sans-serif;
         font-weight: 600;
-        font-size: 80px;
-        letter-spacing: 1.5px;
+        font-size: 15px;
+        letter-spacing: 1px;
         text-transform: uppercase;
         text-decoration: none;
         transition: background 0.2s, color 0.2s;
@@ -75,8 +75,7 @@
         }
 
         .topnav-links a.active {
-            color: #c8860a;
-            border-bottom: 2px solid #c8860a;
-            border-radius: 6px;
-            background-color: #fdf3e3 ;
+            background-color: #1a3c5e;
+            color: #ffffff;
+            border-radius: 20px;
         }
