@@ -1,1 +1,255 @@
-﻿
+﻿@page "/citas"
+@rendermode InteractiveServer
+@using Veterinaria_MaxPets.Models
+@using Veterinaria_MaxPets.Data
+@using Microsoft.EntityFrameworkCore
+@inject AppDbContext Db
+@inject IHttpClientFactory HttpClientFactory
+
+<div class="page-header">
+    <h2>Registro de Citas</h2>
+    <button class="btn-agregar" @onclick="MostrarFormulario">+ Nueva cita</button>
+</div>
+
+@if (mostrarFormulario)
+{
+    <div class="formulario-card">
+        <h4>Nueva cita</h4>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Mascota *</label>
+                <select @bind="nuevaCita.MascotaId">
+                    <option value="0">-- Selecciona una mascota --</option>
+                    @foreach (var m in mascotas)
+                    {
+                        <option value="@m.Id">@m.Nombre (@m.NombreDueno)</option>
+                    }
+                </select>
+                @if (enviado && nuevaCita.MascotaId == 0)
+                {
+                    <span class="error">Campo obligatorio</span>
+                }
+            </div>
+
+            <div class="form-group">
+                <label>Fecha *</label>
+                <input type="datetime-local" @bind="nuevaCita.Fecha" />
+                @if (enviado && nuevaCita.Fecha == default)
+                {
+                    <span class="error">Campo obligatorio</span>
+                }
+            </div>
+
+            <div class="form-group">
+                <label>Servicio (API) *</label>
+                @if (serviciosApi == null)
+                {
+                    <p class="cargando-small">Cargando servicios...</p>
+                }
+                else
+                {
+                    <select @bind="servicioSeleccionadoId">
+                        <option value="0">-- Selecciona un servicio --</option>
+                        @foreach (var s in serviciosApi)
+                        {
+                            <option value="@s.Id">@s.Nombre — $@s.Precio</option>
+                        }
+                    </select>
+                }
+                @if (enviado && servicioSeleccionadoId == 0)
+                {
+                    <span class="error">Campo obligatorio</span>
+                }
+            </div>
+
+            <div class="form-group">
+                <label>Estado</label>
+                <select @bind="nuevaCita.Estado">
+                    <option>Pendiente</option>
+                    <option>Confirmada</option>
+                    <option>Completada</option>
+                    <option>Cancelada</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Notas</label>
+                <input @bind="notasCita" placeholder="Observaciones adicionales..." />
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+            <button class="btn-guardar" @onclick="GuardarCita">Guardar</button>
+            <button class="btn-cancelar" @onclick="CancelarFormulario">Cancelar</button>
+        </div>
+    </div>
+}
+
+@if (mensaje != "")
+{
+    <div class="alerta @(esError ? "alerta-error" : "alerta-exito")">@mensaje</div>
+}
+
+<div class="tabla-card">
+    @if (citas == null)
+    {
+        <p>Cargando citas...</p>
+    }
+    else if (!citas.Any())
+    {
+        <p class="sin-datos">No hay citas registradas aún.</p>
+    }
+    else
+    {
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Mascota</th>
+                    <th>Dueño</th>
+                    <th>Servicio</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in citas)
+                {
+                    <tr>
+                        <td>@c.Mascota?.Nombre</td>
+                        <td>@c.Mascota?.NombreDueno</td>
+                        <td>@ObtenerNombreServicio(c)</td>
+                        <td>@c.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>$@c.Total.ToString("N0")</td>
+                        <td>
+                            <span class="estado-badge estado-@c.Estado.ToLower()">
+                                @c.Estado
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    private List<Mascota> mascotas = new();
+    private List<ServicioApi>? serviciosApi;
+    private List<Cita>? citas;
+
+    private Cita nuevaCita = new() { Fecha = DateTime.Now, Estado = "Pendiente" };
+    private int servicioSeleccionadoId = 0;
+    private string notasCita = "";
+    private bool mostrarFormulario = false;
+    private bool enviado = false;
+    private string mensaje = "";
+    private bool esError = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        mascotas = await Db.Mascotas.ToListAsync();
+        await CargarCitas();
+        await CargarServiciosApi();
+    }
+    private async Task CargarServiciosApi()
+    {
+        try
+        {
+            var http = HttpClientFactory.CreateClient("ApiProfesor");
+
+            // Endpoint 1 — todos los servicios
+            var todos = await http.GetFromJsonAsync<List<ServicioApi>>(
+                "api/salud/servicios");
+
+            // Endpoint 2 — filtrado por especialidad medicina veterinaria
+            serviciosApi = await http.GetFromJsonAsync<List<ServicioApi>>(
+                "api/salud/servicios/especialidad/4");
+        }
+        catch
+        {
+            // DATOS DE PRUEBA — descomentar si la API está caída
+            /*
+            serviciosApi = new List<ServicioApi>
+            {
+                new ServicioApi { Id = 13, Nombre = "Baño y corte básico", Descripcion = "Limpieza e higiene de la mascota", Precio = 250, Duracion = 60, RequiereCita = true, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
+                new ServicioApi { Id = 10, Nombre = "Consulta veterinaria", Descripcion = "Revisión general de la mascota", Precio = 300, Duracion = 30, RequiereCita = true, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
+                new ServicioApi { Id = 12, Nombre = "Desparasitación interna", Descripcion = "Tratamiento oral antiparasitario", Precio = 120, Duracion = 10, RequiereCita = false, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
+                new ServicioApi { Id = 14, Nombre = "Esterilización canina", Descripcion = "Cirugía de esterilización hembra", Precio = 1800, Duracion = 120, RequiereCita = true, Especialidad = "Medicina veterinaria", EspecialidadId = 4 },
+                new ServicioApi { Id = 11, Nombre = "Vacuna antirrábica", Descripcion = "Aplicación anual obligatoria", Precio = 180, Duracion = 15, RequiereCita = false, Especialidad = "Medicina veterinaria", EspecialidadId = 4 }
+            };
+            */
+
+            serviciosApi = new List<ServicioApi>();
+        }
+    }
+
+    private async Task CargarCitas()
+    {
+        citas = await Db.Citas
+            .Include(c => c.Mascota)
+            .Include(c => c.Detalles)
+            .ToListAsync();
+    }
+
+    private void MostrarFormulario()
+    {
+        nuevaCita = new Cita { Fecha = DateTime.Now, Estado = "Pendiente" };
+        servicioSeleccionadoId = 0;
+        notasCita = "";
+        enviado = false;
+        mensaje = "";
+        mostrarFormulario = true;
+    }
+
+    private async Task GuardarCita()
+    {
+        enviado = true;
+
+        if (nuevaCita.MascotaId == 0 || servicioSeleccionadoId == 0 || nuevaCita.Fecha == default)
+            return;
+
+        var servicio = serviciosApi?.FirstOrDefault(s => s.Id == servicioSeleccionadoId);
+        if (servicio == null) return;
+
+        nuevaCita.Total = servicio.Precio;
+
+        Db.Citas.Add(nuevaCita);
+        await Db.SaveChangesAsync();
+
+        var detalle = new DetalleServicio
+        {
+            CitaId = nuevaCita.Id,
+            ServicioApiId = servicio.Id,
+            Cantidad = 1,
+            Precio = servicio.Precio
+        };
+
+        Db.DetalleServicios.Add(detalle);
+        await Db.SaveChangesAsync();
+
+        mensaje = "✅ Cita registrada correctamente.";
+        esError = false;
+        mostrarFormulario = false;
+        enviado = false;
+        await CargarCitas();
+    }
+
+    private string ObtenerNombreServicio(Cita c)
+    {
+        var detalle = c.Detalles?.FirstOrDefault();
+        if (detalle == null) return "—";
+        var servicio = serviciosApi?.FirstOrDefault(s => s.Id == detalle.ServicioApiId);
+        return servicio?.Nombre ?? $"Servicio #{detalle.ServicioApiId}";
+    }
+
+    private void CancelarFormulario()
+    {
+        mostrarFormulario = false;
+        enviado = false;
+        mensaje = "";
+    }
+}
